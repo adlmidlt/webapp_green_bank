@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # Настройка сервиса для сборки образа докера.
+  webapp:
+    build: .
+    container_name: web_green_bank
+    env_file:
+      - .env
+    ports:
+      - '3537:3537'
+    volumes:
+      - .:/usr/src/web_green_bank
+    restart: unless-stopped
+
+  # Настрока сервиса БД.
+  postgresql:
+    image: postgres:latest
+    container_name: db_postgresql
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres-db:/var/lib/postgresql/data
